@@ -9,8 +9,10 @@ vendor/bin/phpunit
 ```
 
 ## 命名方式
-class *.Test
-function test.*
+```
+class *Test
+function test*
+```
 
 ## 基本目錄結構
 ```
