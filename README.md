@@ -1,6 +1,13 @@
+- [安裝](#安裝)
+- [測試指令](#測試指令)
+- [命名方式](#命名方式) 
+- [基本目錄結構](#基本目錄結構)
+- [Assertions](#assertions)
+- [phpunit.xml](#phpunitxml)
+
 ## 安裝
 ```
-composer require --dev phpunit/phpunit
+composer require --dev phpunit/phpunit "^12.1"
 ```
 
 ## 測試指令
@@ -24,6 +31,73 @@ project/
 ├── phpunit.xml
 └── vendor/
 ```
+
+## Assertions
+| Boolean  |   說明
+| ------------- | -------------
+| `assertTrue` |    判斷 `true`
+| `assertFalse` |   判斷 `false`
+---
+| Identity  |   說明
+| ------------- | -------------
+| `assertSame` |    判斷類型與值 `===`
+---
+| Equality  |   說明
+| ------------- | -------------
+| `assertEquals` |    判斷值 `==`，比較陣列或資料結構
+| `assertEqualsCanonicalizing` |    比較兩個陣列（或集合）內容是否相等，但忽略元素的順序
+---
+| iterable  |   說明
+| ------------- | -------------
+| `assertArrayHasKey` |   陣列是否存在指定 key
+| `assertContains` |   值是否存在於陣列或可遍歷的資料結構中
+| `assertContainsOnly[:type]`    |   驗證類型 [:type] = `Array` `Bool` `Callable` `Float` `Int` `Iterable` `Null` `Numeric` `Object` `String` `InstancesOf`
+---
+| objects  |   說明
+| ------------- | -------------
+| `assertObjectHasProperty`    |   物件是否擁有指定的屬性（property）
+---
+| cardinality  |   說明
+| ------------- | -------------
+| `assertCount`    |   陣列或可計數對象（例如陣列、Collection、Countable 類別）中的元素數量是否與預期一致
+| `assertSameSize`    |   確認兩個（陣列、物件等）具有相同的元素數量
+| `assertEmpty`    |   驗證一個變數「是空的」，其判定標準與 empty() 相同 (`''` `[]` `0` `null` `false`)
+---
+| types  |   說明
+| ------------- | -------------
+| `assertInstanceOf`    |   物件是否為特定類別或其子類別的實例
+| `assertIsArray`    |   變數是否為陣列（array）
+| `assertIsList`    |   陣列是「list」格式
+| `assertIsBool`    |   變數是否為布林值
+| `assertIsCallable`    |   變數是否為「可呼叫(callable)」
+| `assertIsFloat`    |   變數是否為浮點數（float
+| `assertIsInt`    |   變數是否為整數（int）
+| `assertIsIterable`    |   變數是否為「可迭代 (iterable)」
+| `assertIsNumeric`    |   變數是否為數字型態（numeric）
+| `assertIsObject`    |   變數是否為物件（object）
+| `assertIsResource`    |   變數是否為 resource 類型，resource 特殊的資料類型，通常代表外部資源的連接或參考 (檔案指標 fopen()、資料庫連線、影像資源、其他系統資源)
+| `assertIsString`    |   變數是否為字串（string）型態
+| `assertNull`    |   變數是否為 null
+---
+| strings  |   說明
+| ------------- | -------------
+| `assertStringStartsWith`    |   字串是否以指定的字串作為開頭
+| `assertStringEndsWith`    |   字串是否以指定的字串作為結尾
+| `assertStringContainsString`    |   字串是否包含另一個指定字串
+| `assertMatchesRegularExpression`    |   字串是否符合指定的正則表達式
+---
+| json  |   說明
+| ------------- | ------------- 
+| `assertJson`    |   字串是否為合法的 JSON 格式 
+| `assertJsonStringEqualsJsonString`    |   比較兩個 JSON 字串是否代表相同的資料結構
+---
+| filesystem  |   說明
+| ------------- | ------------- 
+| `assertDirectoryExists`    |   指定路徑是否存在且為目錄
+| `assertFileExists`    |   指定的檔案是否存在
+| `assertIsReadable`    |   指定的檔案或目錄是否具有「可讀取」權限 
+| `assertIsWritable`    |   指定的檔案或目錄是否具有「可寫入」權限
+---
 
 ## phpunit.xml
 | `<phpunit>`   | desc
