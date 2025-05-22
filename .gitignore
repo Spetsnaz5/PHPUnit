@@ -1,3 +1,5 @@
-vendor
+vendor/
+coverage/
+testdox/
 .env
 .phpunit.result.cache
