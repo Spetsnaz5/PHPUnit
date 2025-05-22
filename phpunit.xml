@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-            colors="true"
-            verbose="true"
+<phpunit bootstrap="vendor/autoload.php" 
+            colors="true" 
+            verbose="true" 
             testdox="true">
     <testsuites>
         <testsuite name="My App Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="My App Test Suite2">
+            <directory>testExample</directory>
+        </testsuite>
     </testsuites>
+    <coverage >
+        <report>
+            <html outputDirectory="coverage/"/>
+            <php outputFile="coverage/coverage.php"/>
+        </report>
+    </coverage>
+    <logging>
+        <testdoxHtml outputFile="testdox/testdox.html"/>
+    </logging>
 </phpunit>

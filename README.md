@@ -1,9 +1,12 @@
 - [安裝](#安裝)
 - [測試指令](#測試指令)
 - [命名方式](#命名方式) 
-- [基本目錄結構](#基本目錄結構)
+- [目錄結構範例](#目錄結構範例)
 - [Assertions](#assertions)
+- [Command-Line Options](#command-line-options)
 - [phpunit.xml](#phpunitxml)
+- [測試覆蓋報告](#測試覆蓋報告)
+
 
 ## 安裝
 ```
@@ -21,7 +24,7 @@ class *Test
 function test*
 ```
 
-## 基本目錄結構
+## 目錄結構範例
 ```
 project/
 ├── src/
@@ -97,6 +100,20 @@ project/
 | `assertFileExists`    |   指定的檔案是否存在
 | `assertIsReadable`    |   指定的檔案或目錄是否具有「可讀取」權限 
 | `assertIsWritable`    |   指定的檔案或目錄是否具有「可寫入」權限
+---
+
+## Command-Line Options
+| Options | desc
+| ------------- | ------------------------------------ 
+| `--verbose`     | 	顯示更詳細的測試資訊
+| `--coverage-text` | 以純文字方式輸出覆蓋率到終端機
+| `--coverage-filter=src` | 明確指定要分析覆蓋率的目錄或檔案
+| `--testsuite=Unit` | 只執行指定的測試套件
+| `--debug`                | 顯示每個測試的詳細執行過程 |
+| `--display-incomplete`   | 顯示未完成的測試      |
+| `--display-skipped`      | 顯示被跳過的測試      |
+| `--display-deprecations` | 顯示已廢棄方法警告     |
+| `--display-errors`       | 顯示錯誤詳情        |
 ---
 
 ## phpunit.xml
@@ -186,32 +203,24 @@ project/
 | `<coverage>`              | desc   |
 | -----------------------   | ---------------------------    |
 | `<coverage>`              | 分析你執行的測試「覆蓋了原始程式碼的哪些部分」，父元素 `<phpunit>`
-| `processUncoveredFiles`   | 會將未被測試執行的檔案也計入報告中
 | `pathCoverage`            | 測試是否覆蓋到所有可能執行路徑（較進階）
-| `<include>`               | 包含在專案清單中的檔案
-| `<exclude>`               | 排除在專案清單中的檔案
 | `<report>`                | 配置要產生的程式碼覆蓋率報告
 ---
 | `<report>`            | desc
 | --------------------- | ---------------------------
 | `<report>`            | 配置要產生的程式碼覆蓋率報告，父元素 `<coverage>`
-| `outputFile`          | 產生的檔案名稱
-| `outputDirectory`     | 輸出的名稱
+| `outputDirectory`     | 輸出的目錄(html)
+| `outputFile`          | 輸出的檔案名稱(php)
 | `<php>`               | 產出 PHP 陣列格式報告
 | `<html>`              | 輸出 HTML 視覺化報告
 | `<xml>`               | 輸出 XML 格式覆蓋率報告
 ---
 
 ```xml
-<coverage includeUncoveredFiles="true"
-          pathCoverage="false"
-          ignoreDeprecatedCodeUnits="true"
-          disableCodeCoverageIgnore="true">
+<coverage>
     <report>
-        <html outputDirectory="html-coverage"/>
+        <html outputDirectory="coverage/"/>
         <php outputFile="coverage.php"/>
-        <text outputFile="coverage.txt"/>
-        <xml outputDirectory="xml-coverage"/>
     </report>
 </coverage>
 ```
@@ -258,3 +267,18 @@ project/
 </php>
 ```
 ---
+
+## 測試覆蓋報告 
+```
+## 安裝 xdebug
+apt install php8.3-xdebug
+
+## 確認 Xdebug 是否已啟用
+php -v | grep 'Xdebug'
+
+## 編輯 CLI 的 xdebug 設定檔 加入 xdebug.mode=coverage
+vim /etc/php/8.3/cli/conf.d/20-xdebug.ini
+
+## 執行
+XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-filter=tests
+```
