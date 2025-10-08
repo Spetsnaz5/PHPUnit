@@ -1,28 +1,28 @@
+# PHPUnit 筆記
+
 - [安裝](#安裝)
 - [測試指令](#測試指令)
-- [命名方式](#命名方式) 
+- [命名方式](#命名方式)
 - [目錄結構範例](#目錄結構範例)
-- [Assertions](#assertions)
-- [Command-Line Options](#command-line-options)
-- [phpunit.xml](#phpunitxml)
-- [測試覆蓋報告](#測試覆蓋報告)
+- [Assertions (斷言)](#assertions-斷言)
+- [Command-Line Options (命令列選項)](#command-line-options-命令列選項)
+- [phpunit.xml 設定檔詳解](#phpunitxml-設定檔詳解)
+- [測試覆蓋率報告](#測試覆蓋率報告)
 
 
 ## 安裝
-```
-composer require --dev phpunit/phpunit "^12.1"
+```bash
+composer require --dev phpunit/phpunit
 ```
 
 ## 測試指令
-```
+```bash
 vendor/bin/phpunit
 ```
 
 ## 命名方式
-```
-class *Test
-function test*
-```
+- 類別名稱必須以 `Test` 結尾 (例如 `MyClassTest`)。
+- 測試方法名稱必須以 `test` 開頭 (例如 `testSomethingWorks`)。
 
 ## 目錄結構範例
 ```
@@ -35,158 +35,110 @@ project/
 └── vendor/
 ```
 
-## Assertions
-| Boolean  |   說明
-| ------------- | -------------
-| `assertTrue` |    判斷 `true`
-| `assertFalse` |   判斷 `false`
----
-| Identity  |   說明
-| ------------- | -------------
-| `assertSame` |    判斷類型與值 `===`
----
-| Equality  |   說明
-| ------------- | -------------
-| `assertEquals` |    判斷值 `==`，比較陣列或資料結構
-| `assertEqualsCanonicalizing` |    比較兩個陣列（或集合）內容是否相等，但忽略元素的順序
----
-| iterable  |   說明
-| ------------- | -------------
-| `assertArrayHasKey` |   陣列是否存在指定 key
-| `assertContains` |   值是否存在於陣列或可遍歷的資料結構中
-| `assertContainsOnly[:type]`    |   驗證類型 [:type] = `Array` `Bool` `Callable` `Float` `Int` `Iterable` `Null` `Numeric` `Object` `String` `InstancesOf`
----
-| objects  |   說明
-| ------------- | -------------
-| `assertObjectHasProperty`    |   物件是否擁有指定的屬性（property）
----
-| cardinality  |   說明
-| ------------- | -------------
-| `assertCount`    |   陣列或可計數對象（例如陣列、Collection、Countable 類別）中的元素數量是否與預期一致
-| `assertSameSize`    |   確認兩個（陣列、物件等）具有相同的元素數量
-| `assertEmpty`    |   驗證一個變數「是空的」，其判定標準與 empty() 相同 (`''` `[]` `0` `null` `false`)
----
-| types  |   說明
-| ------------- | -------------
-| `assertInstanceOf`    |   物件是否為特定類別或其子類別的實例
-| `assertIsArray`    |   變數是否為陣列（array）
-| `assertIsList`    |   陣列是「list」格式
-| `assertIsBool`    |   變數是否為布林值
-| `assertIsCallable`    |   變數是否為「可呼叫(callable)」
-| `assertIsFloat`    |   變數是否為浮點數（float
-| `assertIsInt`    |   變數是否為整數（int）
-| `assertIsIterable`    |   變數是否為「可迭代 (iterable)」
-| `assertIsNumeric`    |   變數是否為數字型態（numeric）
-| `assertIsObject`    |   變數是否為物件（object）
-| `assertIsResource`    |   變數是否為 resource 類型，resource 特殊的資料類型，通常代表外部資源的連接或參考 (檔案指標 fopen()、資料庫連線、影像資源、其他系統資源)
-| `assertIsString`    |   變數是否為字串（string）型態
-| `assertNull`    |   變數是否為 null
----
-| strings  |   說明
-| ------------- | -------------
-| `assertStringStartsWith`    |   字串是否以指定的字串作為開頭
-| `assertStringEndsWith`    |   字串是否以指定的字串作為結尾
-| `assertStringContainsString`    |   字串是否包含另一個指定字串
-| `assertMatchesRegularExpression`    |   字串是否符合指定的正則表達式
----
-| json  |   說明
-| ------------- | ------------- 
-| `assertJson`    |   字串是否為合法的 JSON 格式 
-| `assertJsonStringEqualsJsonString`    |   比較兩個 JSON 字串是否代表相同的資料結構
----
-| filesystem  |   說明
-| ------------- | ------------- 
-| `assertDirectoryExists`    |   指定路徑是否存在且為目錄
-| `assertFileExists`    |   指定的檔案是否存在
-| `assertIsReadable`    |   指定的檔案或目錄是否具有「可讀取」權限 
-| `assertIsWritable`    |   指定的檔案或目錄是否具有「可寫入」權限
----
+## Assertions (斷言)
+斷言是測試的核心，用來驗證程式的實際行為是否與預期相符。以下是常用斷言的整合列表。
 
-## Command-Line Options
-| Options | desc
-| ------------- | ------------------------------------ 
-| `--verbose`     | 	顯示更詳細的測試資訊
-| `--coverage-text` | 以純文字方式輸出覆蓋率到終端機
-| `--coverage-filter=src` | 明確指定要分析覆蓋率的目錄或檔案
-| `--testsuite=Unit` | 只執行指定的測試套件
-| `--debug`                | 顯示每個測試的詳細執行過程 |
-| `--display-incomplete`   | 顯示未完成的測試      |
-| `--display-skipped`      | 顯示被跳過的測試      |
-| `--display-deprecations` | 顯示已廢棄方法警告     |
-| `--display-errors`       | 顯示錯誤詳情        |
----
+| 分類 (Category) | 斷言 (Assertion) | 說明 |
+| :--- | :--- | :--- |
+| **Boolean** | `assertTrue()` | 斷言結果為 `true`。 |
+| | `assertFalse()` | 斷言結果為 `false`。 |
+| **Identity** | `assertSame()` | 斷言兩個變數指向**同一個物件實例**或**完全相等** (`===`)。 |
+| **Equality** | `assertEquals()` | 斷言兩個變數的值相等 (`==`)。若用於物件，則斷言它們是**同類別且擁有相同的屬性值**。 |
+| | `assertEqualsCanonicalizing()` | 斷言兩個陣列的「值」相等，但**忽略元素順序**。 |
+| **Iterable** | `assertArrayHasKey()` | 斷言陣列中存在指定的「鍵 (key)」。 |
+| | `assertContains()` | 斷言「值」存在於陣列或可迭代結構中。若用於字串，則是判斷子字串是否存在。 |
+| | `assertContainsOnly()` | 斷言陣列中的所有元素，都為指定的類型 (例如 `string`, `int`, `MyClass`)。 |
+| **Objects** | `assertObjectHasProperty()` | 斷言物件或類別擁有指定的屬性。 |
+| **Cardinality** | `assertCount()` | 斷言陣列或可計數物件的元素數量，是否與預期一致。 |
+| | `assertSameSize()` | 斷言兩個可計數物件的元素數量相同。 |
+| | `assertEmpty()` | 斷言變數為空 (`empty()` 的判斷標準)。 |
+| **Types** | `assertInstanceOf()` | 斷言物件為特定類別或其子類別的實例。 |
+| | `assertIsArray()` | 斷言變數為陣列。 |
+| | `assertIsList()` | 斷言陣列為 list (意即：從 0 開始的連續整數鍵)。 |
+| | `assertIsBool()` | 斷言變數為布林值。 |
+| | `assertIsCallable()` | 斷言變數為「可呼叫 (callable)」。 |
+| | `assertIsFloat()` | 斷言變數為浮點數。 |
+| | `assertIsInt()` | 斷言變數為整數。 |
+| | `assertIsIterable()` | 斷言變數為「可迭代 (iterable)」。 |
+| | `assertIsNumeric()` | 斷言變數為數字型態。 |
+| | `assertIsObject()` | 斷言變數為物件。 |
+| | `assertIsResource()` | 斷言變數為 resource (資源) 類型，例如檔案指標。 |
+| | `assertIsString()` | 斷言變數為字串。 |
+| | `assertNull()` | 斷言變數為 `null`。 |
+| **Strings** | `assertStringStartsWith()` | 斷言字串以指定的子字串開頭。 |
+| | `assertStringEndsWith()` | 斷言字串以指定的子字串結尾。 |
+| | `assertStringContainsString()` | 斷言字串包含指定的子字串。 |
+| | `assertMatchesRegularExpression()` | 斷言字串符合指定的正規表示式。 |
+| **JSON** | `assertJson()` | 斷言字串為合法的 JSON 格式。 |
+| | `assertJsonStringEqualsJsonString()` | 比較兩個 JSON 字串是否代表相同的資料結構，忽略格式差異。 |
+| **Filesystem**| `assertDirectoryExists()` | 斷言指定的路徑存在且為一個目錄。 |
+| | `assertFileExists()` | 斷言指定的檔案是否存在。 |
+| | `assertIsReadable()` | 斷言指定的檔案或目錄「可讀取」。 |
+| | `assertIsWritable()` | 斷言指定的檔案或目錄「可寫入」。 |
 
-## phpunit.xml
-| `<phpunit>`   | desc
-| ------------- | ------------------------------------ |
-| `bootstrap`   | 執行測試前先引入此檔案（通常是 Composer 的 autoload)
-| `colors`      | 輸出加上顏色
-| `verbose`     | 顯示更多細節
-| `testdox`     | 使用簡潔文字格式輸出測試進度
-| `stopOnDefect`| 在第一次錯誤、失敗、警告或有風險的測試後停止測試套件執行
-| `stopOnError`| 第一個錯誤後停止測試套件執行
-| `stopOnFailure`| 第一次失敗後停止測試套件執行
----
+## Command-Line Options (命令列選項)
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-            colors="true"
-            verbose="true">
-    <testsuites>
-        <testsuite name="Unit Tests">
-            <directory>tests</directory>
-        </testsuite>
-        <testsuite name="Unit Tests2">
-            <directory>tests2</directory>
-        </testsuite>
-    </testsuites>
-    <php>
-        <env name="APP_ENV" value="testing"/>
-    </php>
-</phpunit>
-```
----
+| 選項 (Option) | 說明 |
+| :--- | :--- |
+| `--verbose` | 顯示更詳細的測試執行資訊，包含每個測試的執行時間。 |
+| `--debug` | 顯示非常詳細的除錯資訊，包含測試的執行流程。 |
+| `--testsuite` | 只執行 `phpunit.xml` 中指定的某個測試套件。例如：`--testsuite=Unit` |
+| `--group` | 只執行被 `@group` 標籤標記的測試。 |
+| `--filter` | 只執行名稱符合篩選條件的測試 (例如類別名稱或方法名稱)。 |
+| `--coverage-text` | 在終端機以純文字方式輸出程式碼覆蓋率報告。 |
+| `--coverage-html` | 產生 HTML 格式的覆蓋率報告，並儲存到指定目錄。 |
+| `--coverage-filter` | 在產生覆蓋率報告時，只分析指定的目錄，讓報告更聚焦。例如：`--coverage-filter=src` |
+| `--display-incomplete` | 在報告末尾，顯示所有被標記為未完成的測試。 |
+| `--display-skipped` | 在報告末尾，顯示所有被跳過的測試。 |
+| `--display-deprecations` | 顯示執行過程中遇到的 PHP 已廢棄方法警告。 |
+| `--display-errors` | 顯示測試執行過程中的 PHP 錯誤詳情。 |
 
-| `<testsuites>`           | desc   |
-| ------------------------ | ---------------------------    |
-| `<testsuites>`           | 測試群組總容器，可包含多個 `<testsuite>`，父元素 `<phpunit>`
-| `<testsuite name="...">` | 單一測試群組，名稱自訂
-| `<directory>`            | 指定要包含測試的目錄，可有多個 vendor/bin/phpunit --testsuite "Unit Tests" |
----
+## phpunit.xml 設定檔詳解
+`phpunit.xml` 是 PHPUnit 的主要設定檔，用來集中管理測試的行為和選項。
 
+### 主要屬性
+以下是 `<phpunit>` 根元素的常用屬性：
+- `bootstrap`: 在所有測試執行前，**最先載入**的一個 PHP 檔案。這是一個**必要設定**，幾乎總是設為 `vendor/autoload.php`，用來載入所有 Composer 的依賴套件。
+- `colors`: 設定為 `true`，讓終端機的輸出帶有顏色，更具可讀性。
+- `verbose`: 設定為 `true`，相當於每次執行都加上 `--verbose` 選項。
+- `testdox`: 設定為 `true`，使用簡潔的測試文件格式 (TestDox) 輸出結果，讓報告像一份規格文件。
+- `stopOnDefect`: 設定為 `true`，在遇到第一個「任何類型」的缺陷 (錯誤、失敗、警告、有風險) 時，就立即停止執行。
+- `stopOnError`: 在遇到第一個 PHP 錯誤後，停止執行。
+- `stopOnFailure`: 在遇到第一個斷言失敗 (`assert` failed) 後，停止執行。
+
+### `<testsuites>` (測試套件)
+用來將測試分組管理，方便您執行特定類型的測試 (如單元測試、整合測試)。
+
+#### `<testsuite name="...">`
+定義一個獨立的測試群組，可自訂 `name`。
+- **`<directory>`**: 指定此群組包含的測試檔案目錄。可以有多個。執行時可透過 `--testsuite <name>` 來指定。 
+
+*範例：*
 ```xml
 <testsuites>
-    <testsuite name="unit">
+    <testsuite name="Unit">
         <directory>tests/unit</directory>
     </testsuite>
-    <testsuite name="integration">
+    <testsuite name="Integration">
         <directory>tests/integration</directory>
-    </testsuite>
-    <testsuite name="edge-to-edge">
-        <directory>tests/edge-to-edge</directory>
     </testsuite>
 </testsuites>
 ```
----
 
-| `<source>`        | desc
-| ----------------- | ---------------------------
-| `<source>`        | 配置專案中，父元素 `<phpunit>`
-| `<include>`       | 包含在專案清單中的檔案
-| `<exclude>`       | 排除在專案清單中的檔案
----
-| `<directory>`     | desc
-| ----------------- | ---------------------------
-| `<directory>`     | 配置目錄及其子目錄，父元素 `<include>`、`<exclude>`
-| `prefix`          | 基於前綴的過濾器，套用於目錄及其子目錄中的檔案名稱
-| `suffix`          | 基於後綴的過濾器，套用於目錄及其子目錄中的檔案的名稱
----
-| `<file>`          | desc
-| ----------------- | ---------------------------
-| `<file>`          | 配置一個文件，將其包含在專案清單中或從中排除，父元素 `<include>`、`<exclude>`
----
+### `<source>` (原始碼)
+用來設定程式碼覆蓋率分析的對象，告訴 PHPUnit 你的「原始碼」在哪裡。
+- **`<include>`**: 應被納入覆蓋率分析的檔案或目錄。
+- **`<exclude>`**: 應從覆蓋率分析中排除的檔案或目錄 (例如第三方函式庫、自動產生的檔案)。
 
+#### `<directory>` (在 source 中)
+指定要包含或排除的目錄。
+- `prefix`: 基於檔名前綴過濾。
+- `suffix`: 基於檔名後綴過濾 (例如 `.php`)。
+
+#### `<file>` (在 source 中)
+指定要包含或排除的單一檔案。
+
+*範例：*
 ```xml
 <source>
     <include>
@@ -198,87 +150,79 @@ project/
     </exclude>
 </source>
 ```
----
 
-| `<coverage>`              | desc   |
-| -----------------------   | ---------------------------    |
-| `<coverage>`              | 分析你執行的測試「覆蓋了原始程式碼的哪些部分」，父元素 `<phpunit>`
-| `pathCoverage`            | 測試是否覆蓋到所有可能執行路徑（較進階）
-| `<report>`                | 配置要產生的程式碼覆蓋率報告
----
-| `<report>`            | desc
-| --------------------- | ---------------------------
-| `<report>`            | 配置要產生的程式碼覆蓋率報告，父元素 `<coverage>`
-| `outputDirectory`     | 輸出的目錄(html)
-| `outputFile`          | 輸出的檔案名稱(php)
-| `<php>`               | 產出 PHP 陣列格式報告
-| `<html>`              | 輸出 HTML 視覺化報告
-| `<xml>`               | 輸出 XML 格式覆蓋率報告
----
+### `<coverage>` (程式碼覆蓋率)
+設定如何產生程式碼覆蓋率報告。
+- `pathCoverage`: 設定為 `true`，啟用路徑覆蓋率分析，能分析到函式中更複雜的執行路徑，但會稍微降低執行速度。
 
+#### `<report>`
+可包含多種報告格式：
+- **`<html>`**: 產生 HTML 視覺化報告，最常用，可看到每行程式碼的覆蓋狀態。`outputDirectory` 屬性指定輸出目錄。
+- **`<php>`**: 產出 PHP 陣列格式的報告，用於程式化處理。`outputFile` 屬性指定輸出檔案。
+- **`<xml>`**: 輸出 XML 格式的覆蓋率報告，常用於 CI/CD 整合。
+
+*範例：*
 ```xml
-<coverage>
+<coverage pathCoverage="true">
     <report>
         <html outputDirectory="coverage/"/>
-        <php outputFile="coverage.php"/>
     </report>
 </coverage>
 ```
----
 
-| `<logging>`           | desc   |
-| --------------------- | ---------------------------    |
-| `<logging>`           | 設定 PHPUnit 測試過程輸出紀錄檔，父元素 `<phpunit>`
-| `<junit>`             | 輸出為 JUnit XML 格式，給 Jenkins、GitLab CI 等工具使用
-| `<testdoxHtml>`       | 美觀的人類可讀報告
-| `<testdoxText>`       | 類似上面，但為純文字版本
----
+### `<logging>` (日誌紀錄)
+設定測試過程的日誌輸出，主要用於 CI/CD 整合或產生客製化報告。
+- **`<junit>`**: 輸出為 JUnit XML 格式，是 CI/CD 工具 (如 Jenkins, GitLab CI) 的標準格式。
+- **`<testdoxHtml>`**: 輸出為美觀的 HTML 格式的人類可讀報告。
+- **`<testdoxText>`**: 輸出為純文字格式的人類可讀報告。
 
+*範例：*
 ```xml
 <logging>
     <junit outputFile="junit.xml"/>
     <testdoxHtml outputFile="testdox.html"/>
-    <testdoxText outputFile="testdox.txt"/>
 </logging>
 ```
----
 
-| `<php>`                   | desc   |
-| ------------------------ | ---------------------------    |
-| `<php>`           | 設定 PHP 配置，父元素 `<phpunit>`
-| `<ini>`           | `<ini name="foo" value="bar"/>` => `ini_set('foo', 'bar')`
-| `<const>`         | 設定全域常數 `<const name="foo" value="bar"/>` => `define('foo', 'bar')`
-| `<var>`           | 設定全域變數 `<var name="foo" value="bar"/>` => `$GLOBALS['foo'] = 'bar'`
-| `<env>`           | 設定環境變數 `<env name="foo" value="bar"/>` => `$_ENV['foo'] = 'bar'`
-| `<get>`           | `<get name="foo" value="bar"/>` => `$_GET['foo'] = 'bar'`
-| `<post>`          | `<post name="foo" value="bar"/>` => `$_POST['foo'] = 'bar'`
-| `<cookie>`        | `<cookie name="foo" value="bar"/>` => `$_COOKIE['foo'] = 'bar'`
-| `<server>`        | `<server name="foo" value="bar"/>` => `$_SERVER['foo'] = 'bar'`
-| `<files>`         | `<files name="foo" value="bar"/>` => `$_FILES['foo'] = 'bar'`
-| `<request>`       | `<request name="foo" value="bar"/>` => `$_REQUEST['foo'] = 'bar'`
----
+### `<php>` (PHP 設定)
+在測試執行期間，用來模擬不同的 PHP 環境設定。
+- **`<ini name="..." value="..."/>`**: 暫時設定一個 `php.ini` 的值，等同於 `ini_set()`。
+- **`<const name="..." value="..."/>`**: 定義一個全域常數，等同於 `define()`。常用於定義測試環境依賴的常數。
+- **`<var name="..." value="..."/>`**: 設定一個 `$GLOBALS` 全域變數。
+- **`<env name="..." value="..."/>`**: 設定一個 `$_ENV` 環境變數，常用於切換設定 (如 `APP_ENV=testing`)。
+- **`<server name="..." value="..."/>`**: 設定一個 `$_SERVER` 變數，在測試 Web 相關功能時很有用。
+- **`<get>` / `<post>` / `<cookie>` / `<files>` / `<request>`**: 分別用來模擬設定對應的超全域變數。
 
+*範例：*
 ```xml
 <php>
-    <ini name="foo" value="bar"/>
-    <const name="foo" value="bar"/>
-    <var name="foo" value="bar"/>
-    <env name="foo" value="bar"/>
+    <ini name="memory_limit" value="-1"/>
+    <env name="APP_ENV" value="testing"/>
+    <server name="SERVER_PORT" value="8000"/>
 </php>
 ```
----
 
-## 測試覆蓋報告 
-```
-## 安裝 xdebug
-apt install php8.3-xdebug
+## 測試覆蓋率報告
 
-## 確認 Xdebug 是否已啟用
-php -v | grep 'Xdebug'
+要產生程式碼覆蓋率報告，您需要安裝並啟用 Xdebug 擴充套件。
 
-## 編輯 CLI 的 xdebug 設定檔 加入 xdebug.mode=coverage
-vim /etc/php/8.3/cli/conf.d/20-xdebug.ini
+1.  **安裝 Xdebug**
+    ```bash
+    # 以 Ubuntu / Debian 為例
+    apt install php8.3-xdebug
+    ```
 
-## 執行
-XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --coverage-filter=tests
-```
+2.  **啟用 Coverage 模式**
+    在您的 `php.ini` 或 `xdebug.ini` 設定檔中，確保 `xdebug.mode` 包含 `coverage`。
+    ```ini
+    xdebug.mode=coverage
+    ```
+
+3.  **執行測試並產生報告**
+    ```bash
+    # 產生 HTML 報告到 coverage/ 目錄
+    vendor/bin/phpunit --coverage-html coverage
+
+    # 在終端機直接查看文字報告
+    vendor/bin/phpunit --coverage-text
+    ```
